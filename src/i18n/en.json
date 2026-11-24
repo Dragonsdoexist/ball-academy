@@ -9,7 +9,7 @@
   "viewer": "3D viewer",
   "canvasLabel": "Interactive calibration sphere. Use the arrow keys to rotate and plus or minus to zoom.",
   "model": "Calibration sphere",
-  "previewNote": "This practice sphere lets you try the viewer. Human and canine anatomy models are in development.",
+  "previewNote": "Practice model for the viewer. Human and canine anatomy models are in development.",
   "viewerSettings": "Viewer controls",
   "orientation": "Orientation",
   "front": "Front",
@@ -26,5 +26,16 @@
   "use": "For educational use only.",
   "thickness": "Layer thickness exaggerated for visibility",
   "unavailable": "This viewer requires WebGL 2. Enable hardware acceleration or try a WebGL-compatible browser.",
-  "retry": "Reload viewer"
+  "retry": "Reload viewer",
+  "styleLabel": "Illustration style",
+  "doodle": "Little Doodle",
+  "oil": "Oil Study",
+  "blueprint": "Cyanotype",
+  "paper": "Cut Paper",
+  "glass": "Stained Glass",
+  "doodleNote": "A wobbly ink outline, two rosy cheeks and a little wave.",
+  "oilNote": "Curved bristle marks carry warm ochre into plum shadow.",
+  "blueprintNote": "Fine construction lines and a graduated ring trace the sphere in Prussian blue.",
+  "paperNote": "Tilt the model to see the gaps between the slices of coloured paper.",
+  "glassNote": "Jewel-toned panes meet along raised seams of dark lead."
 }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-style="doodle">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,8 +18,13 @@
     </div></header>
     <main>
       <div class="intro"><h1 data-text="heading"></h1><p data-text="subtitle"></p></div>
+      <section class="art-palette" aria-labelledby="palette-title">
+        <h2 id="palette-title" data-text="styleLabel"></h2>
+        <div id="style-picker" role="group" data-label="styleLabel"></div>
+      </section>
       <section class="workbench" data-label="viewer">
         <div class="stage">
+          <div class="stage-mount" aria-hidden="true"></div>
           <div id="viewport"></div>
           <div class="stage-heading"><span class="stage-symbol" aria-hidden="true">◉</span><h2 data-text="viewer"></h2></div>
           <div id="failure" role="status" hidden>
@@ -45,7 +50,7 @@
           </div></div>
           <button type="button" id="reset"><span aria-hidden="true">↺</span><span data-text="reset"></span></button>
           <section class="model-info"><p class="info-caption" data-text="aboutModel"></p>
-            <h3 data-text="model"></h3><p data-text="previewNote"></p>
+            <h3 data-text="model"></h3><p id="style-note"></p><p data-text="previewNote"></p>
           </section>
         </aside>
       </section>

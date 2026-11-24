@@ -1,6 +1,12 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { calibrationSphere, referenceFloor } from './calibration.js';
+import { doodle } from './styles/doodle.js';
+import { oil } from './styles/oil.js';
+import { blueprint } from './styles/blueprint.js';
+import { paper } from './styles/paper.js';
+import { glass } from './styles/glass.js';
+
+const renderStyles = { doodle, oil, blueprint, paper, glass };
 
 const distance = 4.65;
 const directions = {
@@ -9,7 +15,7 @@ const directions = {
   top: new THREE.Vector3(0, 1, .001).normalize()
 };
 
-export function createViewer(container, onView, onFailure) {
+export function createViewer(container, onView, onFailure, initialStyle) {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setClearColor(0x000000, 0);
@@ -28,15 +34,16 @@ export function createViewer(container, onView, onFailure) {
   controls.maxDistance = distance / .7;
   controls.maxPolarAngle = Math.PI * .83;
   controls.rotateSpeed = .75;
-  scene.add(calibrationSphere(), referenceFloor());
-  scene.add(new THREE.HemisphereLight(0xe9fffa, 0x547a73, 1.35));
-  function light(color, power, x, y, z) {
-    const lamp = new THREE.DirectionalLight(color, power);
-    lamp.position.set(x, y, z);
-    scene.add(lamp);
+  const studies = new Map();
+  let active;
+  function useStyle(id) {
+    if (!studies.has(id)) studies.set(id, renderStyles[id]());
+    if (active) scene.remove(active);
+    active = studies.get(id);
+    scene.background = active.userData.backdrop ?? null;
+    scene.add(active);
+    render();
   }
-  light(0xfff6e7, 2.4, -3, 5, 4);
-  light(0x98e4df, 2.1, 2, 2, -3);
 
   function render() {
     const direction = camera.position.clone().normalize();
@@ -76,6 +83,7 @@ export function createViewer(container, onView, onFailure) {
   });
 
   orient('front', distance);
+  useStyle(initialStyle);
   function resize() {
     const { width, height } = container.getBoundingClientRect();
     if (width <= 0 || height <= 0) return;
@@ -88,5 +96,5 @@ export function createViewer(container, onView, onFailure) {
   }
   new ResizeObserver(resize).observe(container);
   resize();
-  return { orient, zoom, reset: () => orient('front', distance) };
+  return { orient, zoom, useStyle, reset: () => orient('front', distance) };
 }

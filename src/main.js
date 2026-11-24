@@ -1,5 +1,6 @@
 import './styles.css';
 import { readLanguage, setLanguage, translations } from './i18n/index.js';
+import { styles, resolveStyle } from './art-directions.js';
 import { createViewer } from './scene/renderer.js';
 
 const $ = selector => document.querySelector(selector);
@@ -8,6 +9,40 @@ document.documentElement.classList.toggle('touch-enabled', navigator.maxTouchPoi
 const angleButtons = [...document.querySelectorAll('[data-angle]')];
 const viewName = $('#current-view');
 const zoomValue = $('#zoom-value');
+const stylePicker = $('#style-picker');
+let activeStyle = resolveStyle(new URL(location.href).searchParams.get('style'));
+let viewer;
+for (const id of styles) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.dataset.styleChoice = id;
+  const swatch = document.createElement('span');
+  swatch.className = 'swatch swatch-' + id;
+  swatch.style.backgroundImage = 'url(' + import.meta.env.BASE_URL + 'swatches/' + id + '.webp)';
+  swatch.setAttribute('aria-hidden', 'true');
+  const label = document.createElement('span');
+  label.dataset.text = id;
+  button.append(swatch, label);
+  button.addEventListener('click', () => selectStyle(id, true));
+  stylePicker.append(button);
+}
+function selectStyle(id, updateURL) {
+  activeStyle = id;
+  document.documentElement.dataset.style = id;
+  for (const button of stylePicker.children) {
+    button.setAttribute('aria-pressed', String(button.dataset.styleChoice === id));
+  }
+  const description = $('#style-note');
+  description.dataset.text = id + 'Note';
+  description.textContent = translations[lang][description.dataset.text];
+  if (updateURL) {
+    const url = new URL(location.href);
+    url.searchParams.set('style', id);
+    history.replaceState(null, '', url);
+    viewer?.useStyle(id);
+  }
+}
+selectStyle(activeStyle, false);
 function updateView(angle, percent) {
   for (const button of angleButtons) {
     button.setAttribute('aria-pressed', String(button.dataset.angle === angle));
@@ -32,7 +67,7 @@ for (const button of document.querySelectorAll('[data-language]')) {
 }
 $('#retry').addEventListener('click', () => location.reload());
 try {
-  const viewer = createViewer($('#viewport'), updateView, showFailure);
+  viewer = createViewer($('#viewport'), updateView, showFailure, activeStyle);
   for (const button of angleButtons) button.addEventListener('click', () => viewer.orient(button.dataset.angle));
   $('#reset').addEventListener('click', viewer.reset);
   $('#zoom-in').addEventListener('click', () => viewer.zoom(1.15));

@@ -9,7 +9,7 @@
   "viewer": "3D 查看器",
   "canvasLabel": "可交互的校准球。使用方向键旋转，使用加减键缩放。",
   "model": "校准球",
-  "previewNote": "可使用校准球练习调整视角。人和犬的解剖模型正在开发中。",
+  "previewNote": "这是用于练习操作的模型。人和犬的解剖模型正在开发中。",
   "viewerSettings": "视图控制",
   "orientation": "观察角度",
   "front": "正面",
@@ -26,5 +26,16 @@
   "use": "仅供教学使用。",
   "thickness": "为便于观察，各层厚度已放大",
   "unavailable": "此查看器需要 WebGL 2。请启用硬件加速或使用支持 WebGL 的浏览器。",
-  "retry": "重新加载查看器"
+  "retry": "重新加载查看器",
+  "styleLabel": "插画风格",
+  "doodle": "简笔画",
+  "oil": "油画习作",
+  "blueprint": "蓝晒制图",
+  "paper": "叠纸雕塑",
+  "glass": "彩绘玻璃",
+  "doodleNote": "几笔歪歪的墨线，两颊浅红，小手还在打招呼。",
+  "oilNote": "弧形笔触顺着球面铺开，从暖赭色过渡到暗紫色。",
+  "blueprintNote": "普鲁士蓝底上，细白线与刻度环勾勒出球体。",
+  "paperNote": "转动模型，可以看到层层色纸之间的空隙。",
+  "glassNote": "宝石色的玻璃片由凸起的深色铅条拼接。"
 }

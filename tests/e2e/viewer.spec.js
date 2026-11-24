@@ -14,11 +14,15 @@ test('draws the calibration model and supports camera controls', async ({ page }
   await expect(page.getByText(touch ? 'Drag to rotate · Pinch to zoom' : 'Drag to rotate · Scroll to zoom')).toBeVisible();
   const snapshot = await canvas.screenshot();
   const pixels = PNG.sync.read(snapshot);
-  const luminance = (x, y) => {
-    const i = 4 * (Math.floor(y * pixels.height) * pixels.width + Math.floor(x * pixels.width));
-    return (pixels.data[i] + pixels.data[i + 1] + pixels.data[i + 2]) / 3;
-  };
-  expect(luminance(.5, .46) - luminance(.12, .4)).toBeGreaterThan(45);
+  let inkPixels = 0;
+  // Count marks inside the practice character, clear of captions and border.
+  for (let y = Math.floor(pixels.height * .39); y < pixels.height * .68; y++) {
+    for (let x = Math.floor(pixels.width * .42); x < pixels.width * .58; x++) {
+      const at = 4 * (y * pixels.width + x);
+      if (Math.max(...pixels.data.subarray(at, at + 3)) < 90) inkPixels++;
+    }
+  }
+  expect(inkPixels).toBeGreaterThan(12);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: join(process.env.SCREENSHOT_DIR || 'docs/screenshots', info.project.name + '-en.png'), fullPage: true });
   await page.getByRole('button', { name: 'Side', exact: true }).click();
@@ -84,4 +88,47 @@ test('gives a localized recovery path when WebGL is unavailable', async ({ page 
   await page.goto('./?lang=zh');
   await expect(page.getByRole('button', { name: '重新加载查看器' })).toBeVisible();
   await expect(page.getByRole('button', { name: '重置视图' })).toBeDisabled();
+});
+
+test('renders all five illustration styles and keeps the camera and language', async ({ page }, info) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+  await page.goto('./?lang=zh&keep=1');
+  await expect(page.locator('html')).toHaveAttribute('data-style', 'doodle');
+  await expect(page.locator('[data-style-choice="doodle"]')).toHaveText('简笔画');
+  const models = [];
+  for (const style of ['oil', 'blueprint', 'paper', 'glass', 'doodle']) {
+    const button = page.locator('[data-style-choice="' + style + '"]');
+    await button.click();
+    await expect(button).toHaveAttribute('aria-pressed', 'true');
+    await expect(page).toHaveURL(new RegExp('keep=1&style=' + style));
+    const image = await page.locator('#viewport').screenshot();
+    // Distinguish the rendered surfaces using the central patch, away from the stage backdrop.
+    const pixels = PNG.sync.read(image);
+    const sample = [];
+    for (const y of [.46,.48,.5,.52,.54]) {
+      for (const x of [.48,.49,.5,.51,.52]) {
+        const offset = 4 * (Math.floor(y*pixels.height) * pixels.width + Math.floor(x*pixels.width));
+        sample.push(...pixels.data.subarray(offset, offset+3));
+      }
+    }
+    for (const other of models) {
+      const delta = sample.reduce((sum, value, i) => sum + Math.abs(value-other[i]), 0) / sample.length;
+      expect(delta).toBeGreaterThan(10);
+    }
+    models.push(sample);
+    await page.locator('.stage').screenshot({
+      path: join(process.env.SCREENSHOT_DIR || 'docs/screenshots', 'styles', info.project.name + '-' + style + '.png')
+    });
+  }
+  await page.getByRole('button', { name: '侧面', exact: true }).click();
+  await page.getByRole('button', { name: '放大', exact: true }).click();
+  await page.locator('[data-style-choice="oil"]').click();
+  await expect(page.locator('#current-view')).toHaveText('侧面');
+  await expect(page.locator('output')).toHaveText('115%');
+  await page.reload();
+  await expect(page.locator('[data-style-choice="oil"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('html')).toHaveAttribute('lang','zh-Hans');
+  expect(errors).toEqual([]);
 });
