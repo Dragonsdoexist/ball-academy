@@ -18,15 +18,15 @@
     </div></header>
     <main>
       <div class="intro"><h1 data-text="heading"></h1><p data-text="subtitle"></p></div>
-      <section class="art-palette" aria-labelledby="palette-title">
-        <h2 id="palette-title" data-text="styleLabel"></h2>
-        <div id="style-picker" role="group" data-label="styleLabel"></div>
-      </section>
+      <div class="species-bar" role="group" data-label="speciesLabel">
+        <button type="button" data-species="human" data-text="human"></button>
+        <button type="button" data-species="dog" data-text="dog"></button>
+      </div>
       <section class="workbench" data-label="viewer">
         <div class="stage">
-          <div class="stage-mount" aria-hidden="true"></div>
           <div id="viewport"></div>
-          <div class="stage-heading"><span class="stage-symbol" aria-hidden="true">◉</span><h2 data-text="viewer"></h2></div>
+          <div class="stage-heading"><span class="stage-symbol" aria-hidden="true">◉</span><h2 id="specimen-title"></h2></div>
+          <div id="loading" role="status" data-text="loading"></div>
           <div id="failure" role="status" hidden>
             <p data-text="unavailable"></p><button type="button" id="retry" data-text="retry"></button>
           </div>
@@ -35,9 +35,14 @@
           </div>
         </div>
         <aside>
-          <h2 data-text="viewerSettings"></h2>
+          <h2 data-text="dissection"></h2>
+          <label class="layer-field" for="layer" data-text="layer"></label>
+          <select id="layer"></select>
+          <input id="peel" type="range" min="0" max="9" step="1" data-label="layer" />
+          <div class="depth-ends"><span data-text="surface"></span><span data-text="deep"></span></div>
           <fieldset class="orientation"><legend data-text="orientation"></legend>
             <div class="angles">
+              <button type="button" data-angle="study"><i class="orientation-icon side" aria-hidden="true"></i><span data-text="study"></span></button>
               <button type="button" data-angle="front"><i class="orientation-icon face" aria-hidden="true"></i><span data-text="front"></span></button>
               <button type="button" data-angle="side"><i class="orientation-icon side" aria-hidden="true"></i><span data-text="side"></span></button>
               <button type="button" data-angle="top"><i class="orientation-icon top" aria-hidden="true"></i><span data-text="top"></span></button>
@@ -49,11 +54,16 @@
             <button type="button" id="zoom-in" data-label="zoomIn"><i class="plus" aria-hidden="true"></i></button>
           </div></div>
           <button type="button" id="reset"><span aria-hidden="true">↺</span><span data-text="reset"></span></button>
-          <section class="model-info"><p class="info-caption" data-text="aboutModel"></p>
-            <h3 data-text="model"></h3><p id="style-note"></p><p data-text="previewNote"></p>
+          <section class="model-info">
+            <label for="structure" data-text="inspect"></label><select id="structure"></select>
+            <p id="detail" aria-live="polite"></p>
+            <a id="structure-source" target="_blank" rel="noreferrer" data-text="source"></a>
           </section>
         </aside>
       </section>
+      <details class="model-notes"><summary data-text="notes"></summary>
+        <p id="specimen-note"></p><p data-text="review"></p><div id="references"></div>
+      </details>
       <footer><span data-text="use"></span><span data-text="thickness"></span></footer>
     </main>
     <script type="module" src="/src/main.js"></script>

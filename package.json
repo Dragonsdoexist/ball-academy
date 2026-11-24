@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "meshes": "node scripts/build-meshes.mjs"
   },
   "dependencies": {
     "three": "0.187.0"
