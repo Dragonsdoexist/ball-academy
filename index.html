@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="theme-color" content="#f5f7f8" />
+    <link rel="icon" href="./mark.svg" type="image/svg+xml" />
+    <title></title>
+  </head>
+  <body>
+    <header class="mast"><div class="mast-inner">
+      <div class="brand"><img src="./mark.svg" alt="" width="34" height="34" /><span data-text="title"></span></div>
+      <div class="language" role="group" data-label="langLabel">
+        <button type="button" lang="en" data-language="en" data-text="english"></button>
+        <button type="button" lang="zh-Hans" data-language="zh" data-text="chinese"></button>
+      </div>
+    </div></header>
+    <main>
+      <div class="intro"><h1 data-text="heading"></h1><p data-text="subtitle"></p></div>
+      <section class="workbench" data-label="viewer">
+        <div class="stage">
+          <div id="viewport"></div>
+          <div class="stage-heading"><span class="stage-symbol" aria-hidden="true">◉</span><h2 data-text="viewer"></h2></div>
+          <div id="failure" role="status" hidden>
+            <p data-text="unavailable"></p><button type="button" id="retry" data-text="retry"></button>
+          </div>
+          <div class="stage-footer"><span class="view-name"><i aria-hidden="true"></i><span id="current-view" data-text="front"></span></span>
+            <span class="pointer-tip" data-text="gesture"></span><span class="touch-tip" data-text="touchGesture"></span>
+          </div>
+        </div>
+        <aside>
+          <h2 data-text="viewerSettings"></h2>
+          <fieldset class="orientation"><legend data-text="orientation"></legend>
+            <div class="angles">
+              <button type="button" data-angle="front"><i class="orientation-icon face" aria-hidden="true"></i><span data-text="front"></span></button>
+              <button type="button" data-angle="side"><i class="orientation-icon side" aria-hidden="true"></i><span data-text="side"></span></button>
+              <button type="button" data-angle="top"><i class="orientation-icon top" aria-hidden="true"></i><span data-text="top"></span></button>
+            </div>
+          </fieldset>
+          <div class="zoom-block"><span data-text="zoom"></span><div class="zoom-controls">
+            <button type="button" id="zoom-out" data-label="zoomOut"><i class="minus" aria-hidden="true"></i></button>
+            <output id="zoom-value"></output>
+            <button type="button" id="zoom-in" data-label="zoomIn"><i class="plus" aria-hidden="true"></i></button>
+          </div></div>
+          <button type="button" id="reset"><span aria-hidden="true">↺</span><span data-text="reset"></span></button>
+          <section class="model-info"><p class="info-caption" data-text="aboutModel"></p>
+            <h3 data-text="model"></h3><p data-text="previewNote"></p>
+          </section>
+        </aside>
+      </section>
+      <footer><span data-text="use"></span><span data-text="thickness"></span></footer>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
